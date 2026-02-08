@@ -77,7 +77,9 @@ git push -u origin main
 5. Chọn **Branch**: main / root
 6. Click **Save**
 
-Site sẽ available tại: `https://username.github.io/vibe-coder-website/`
+Site sẽ available tại: `https://username.github.io/<ten-repo>/` (ví dụ: `https://thanhtran-165.github.io/Vibe-Coder/`)
+
+> Lưu ý: URL dạng `https://username.github.io/` (không có `/ten-repo/`) là **user site** và phải deploy trong repo tên đúng `username.github.io`.
 
 ## 🎨 Design System
 
