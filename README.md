@@ -15,7 +15,6 @@ Một trang web tĩnh (static site) tương tác, trình bày khung phân loại
 - ✅ **Scroll Spy** - Highlight section đang đọc
 - ✅ **Reading Progress** - Thanh tiến độ đọc
 - ✅ **Reveal Animations** - Hiệu ứng nhẹ khi scroll
-- ✅ **Toolkit Templates** - Copy spec + gate checklist dùng ngay
 - ✅ **Mobile/Keyboard Tooltips** - Tooltip chart dùng được trên mobile + keyboard
 - ✅ **Reduced Motion Support** - Tôn trọng `prefers-reduced-motion`
 
@@ -104,19 +103,17 @@ Site sẽ available tại: `https://username.github.io/<ten-repo>/` (ví dụ: `
 
 ## 📊 Nội dung
 
-Website bao gồm 11 section chính:
+Website bao gồm 9 section chính:
 
 1. **Hero** - Title, subtitle, 2 CTA buttons
-2. **Bạn sẽ học được gì?** - 3 mục tiêu học tập để định hướng
-3. **Why Now** - Stat strip (6 số liệu từ tài liệu gốc)
-4. **Vibe Coder?** - 4 cards định nghĩa
-5. **Hiểu lầm** - 3 misconceptions + "So what?"
-6. **4 Kiểu người dùng** - Biểu đồ 2 trục (Agency vs Engineering Literacy)
-7. **Thang L0-L6** - Timeline dọc + accordion chi tiết
-8. **Bộ công cụ thực hành** - 2 template copy-paste (spec + gate checklist)
-9. **Quiz 1 phút** - 3 câu hỏi → level + persona + upgrade steps
-10. **Kết luận** - Takeaways + CTA
-11. **References** - 6 nguồn từ tài liệu gốc
+2. **Why Now** - Stat strip (6 số liệu từ tài liệu gốc)
+3. **Vibe Coder?** - 4 cards định nghĩa
+4. **Hiểu lầm** - 3 misconceptions + "So what?"
+5. **4 Kiểu người dùng** - Biểu đồ 2 trục (Agency vs Engineering Literacy)
+6. **Thang L0-L6** - Timeline dọc + accordion chi tiết
+7. **Quiz 1 phút** - 3 câu hỏi → level + persona + upgrade steps
+8. **Kết luận** - Takeaways + CTA
+9. **References** - 6 nguồn từ tài liệu gốc
 
 ## 🧠 Quiz Scoring Logic
 

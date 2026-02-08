@@ -45,7 +45,6 @@ function initializeApp() {
     initializeScrollSpy();
     initializeReadingProgress();
     initializeRevealAnimations();
-    initializeTemplateCopyButtons();
 }
 
 function setCurrentYear() {
@@ -183,7 +182,7 @@ function initializeReadingProgress() {
 // ========================================
 function initializeRevealAnimations() {
     const revealTargets = document.querySelectorAll(
-        '.level-item, .card, .stat-card, .insight-card, .misconception-card, .so-what, .chart-container, .toolkit-card, .takeaway-item, .quiz-container, .conclusion-cta, .reference-item'
+        '.level-item, .card, .stat-card, .insight-card, .misconception-card, .so-what, .chart-container, .takeaway-item, .quiz-container, .conclusion-cta, .reference-item'
     );
 
     if (!revealTargets.length) return;
@@ -684,24 +683,6 @@ function flashCopied(button, { copiedText = 'Đã copy!', durationMs = 1500 } = 
         button.textContent = original;
         button.classList.remove('copied');
     }, durationMs);
-}
-
-function initializeTemplateCopyButtons() {
-    document.querySelectorAll('.copy-template-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const targetId = btn.getAttribute('data-copy-target');
-            const source = targetId ? document.getElementById(targetId) : null;
-            const text = source?.textContent?.trim();
-            if (!text) return;
-
-            const ok = await copyToClipboard(text);
-            if (ok) {
-                flashCopied(btn);
-            } else {
-                alert('Không thể copy template. Vui lòng thử lại.');
-            }
-        });
-    });
 }
 
 function copyQuizResult() {
