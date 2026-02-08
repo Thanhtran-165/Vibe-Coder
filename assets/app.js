@@ -5,8 +5,15 @@ const AppState = {
     content: null,
     currentTheme: localStorage.getItem('theme') || 'light',
     quizAnswers: {},
-    quizScore: 0
+    quizScore: 0,
+    userTypesGlobalListenersInitialized: false,
+    chartResizeHandlerInitialized: false,
+    chartResizeTimeout: null
 };
+
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
 // ========================================
 // CONTENT LOADING
@@ -23,10 +30,12 @@ async function loadContent() {
 }
 
 function initializeApp() {
+    setCurrentYear();
     renderStats();
     renderCharacteristics();
     renderMisconceptions();
     renderUserTypesChart();
+    initializeChartResizeHandler();
     renderLevels();
     renderQuiz();
     renderTakeaways();
@@ -36,6 +45,24 @@ function initializeApp() {
     initializeScrollSpy();
     initializeReadingProgress();
     initializeRevealAnimations();
+    initializeTemplateCopyButtons();
+}
+
+function setCurrentYear() {
+    const yearEl = document.getElementById('currentYear');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+}
+
+function initializeChartResizeHandler() {
+    if (AppState.chartResizeHandlerInitialized) return;
+    AppState.chartResizeHandlerInitialized = true;
+
+    window.addEventListener('resize', () => {
+        window.clearTimeout(AppState.chartResizeTimeout);
+        AppState.chartResizeTimeout = window.setTimeout(() => {
+            renderUserTypesChart();
+        }, 150);
+    });
 }
 
 // ========================================
@@ -45,12 +72,17 @@ function initializeTheme() {
     const themeToggle = document.getElementById('themeToggle');
     if (!themeToggle) return;
 
+    const applyTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    };
+
     // Apply saved theme
-    document.documentElement.setAttribute('data-theme', AppState.currentTheme);
+    applyTheme(AppState.currentTheme);
 
     themeToggle.addEventListener('click', () => {
         AppState.currentTheme = AppState.currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', AppState.currentTheme);
+        applyTheme(AppState.currentTheme);
         localStorage.setItem('theme', AppState.currentTheme);
     });
 }
@@ -65,12 +97,14 @@ function initializeNavigation() {
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            navToggle.setAttribute('aria-expanded', navMenu.classList.contains('active') ? 'true' : 'false');
         });
 
         // Close menu when clicking on a link
         navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
             });
         });
     }
@@ -78,15 +112,27 @@ function initializeNavigation() {
     // Smooth scroll for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+
+            const target = document.querySelector(href);
             if (target) {
+                e.preventDefault();
                 const headerHeight = document.querySelector('.nav').offsetHeight;
                 const targetPosition = target.offsetTop - headerHeight;
+
+                const instant = prefersReducedMotion() || this.classList.contains('skip-link');
                 window.scrollTo({
                     top: targetPosition,
-                    behavior: 'smooth'
+                    behavior: instant ? 'auto' : 'smooth'
                 });
+
+                // Ensure keyboard users land on the target
+                if (!target.hasAttribute('tabindex')) {
+                    target.setAttribute('tabindex', '-1');
+                    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+                }
+                window.setTimeout(() => target.focus({ preventScroll: true }), instant ? 0 : 450);
             }
         });
     });
@@ -106,12 +152,11 @@ function initializeScrollSpy() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const id = entry.target.getAttribute('id');
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${id}`) {
-                        link.classList.add('active');
-                    }
-                });
+                const activeLink = Array.from(navLinks).find(link => link.getAttribute('href') === `#${id}`);
+                if (!activeLink) return;
+
+                navLinks.forEach(link => link.classList.remove('active'));
+                activeLink.classList.add('active');
             }
         });
     }, observerOptions);
@@ -137,30 +182,41 @@ function initializeReadingProgress() {
 // REVEAL ANIMATIONS
 // ========================================
 function initializeRevealAnimations() {
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-    };
+    const revealTargets = document.querySelectorAll(
+        '.level-item, .card, .stat-card, .insight-card, .misconception-card, .so-what, .chart-container, .toolkit-card, .takeaway-item, .quiz-container, .conclusion-cta, .reference-item'
+    );
+
+    if (!revealTargets.length) return;
+
+    if (prefersReducedMotion()) {
+        revealTargets.forEach(el => el.classList.add('visible'));
+        return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        revealTargets.forEach(el => el.classList.add('visible'));
+        return;
+    }
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible', 'fade-in-up');
-                observer.unobserve(entry.target);
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            if (entry.target.classList.contains('stat-card')) {
+                animateStatCard(entry.target);
             }
+            observer.unobserve(entry.target);
         });
-    }, observerOptions);
-
-    // Observe level items for accordion animation
-    document.querySelectorAll('.level-item').forEach(item => {
-        observer.observe(item);
+    }, {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.12
     });
 
-    // Observe cards
-    document.querySelectorAll('.card, .stat-card, .misconception-card, .takeaway-item').forEach(item => {
-        item.style.opacity = '0';
-        observer.observe(item);
+    revealTargets.forEach((el, index) => {
+        el.classList.add('reveal');
+        el.style.setProperty('--reveal-delay', `${Math.min(index * 50, 250)}ms`);
+        observer.observe(el);
     });
 }
 
@@ -180,6 +236,53 @@ function renderStats() {
             <div class="stat-source">${stat.source}</div>
         </div>
     `).join('');
+}
+
+function parseStatValue(raw) {
+    const trimmed = (raw || '').trim();
+    const match = trimmed.match(/^(\$)?(\d+(?:\.\d+)?)([a-zA-Z%]*)$/);
+    if (!match) return null;
+
+    const [, prefix = '', numberPart, suffix = ''] = match;
+    const value = Number(numberPart);
+    if (!Number.isFinite(value)) return null;
+
+    const decimals = numberPart.includes('.') ? numberPart.split('.')[1].length : 0;
+    return { prefix, value, suffix, decimals, raw: trimmed };
+}
+
+function animateStatCard(card) {
+    const valueEl = card.querySelector('.stat-value');
+    if (!valueEl) return;
+    if (valueEl.dataset.animated === 'true') return;
+
+    const parsed = parseStatValue(valueEl.textContent);
+    if (!parsed) return;
+
+    valueEl.dataset.animated = 'true';
+
+    const { prefix, value, suffix, decimals, raw } = parsed;
+    const durationMs = 900;
+    const start = performance.now();
+
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const frame = (now) => {
+        const t = Math.min((now - start) / durationMs, 1);
+        const eased = easeOutCubic(t);
+        const current = value * eased;
+        const formatted = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
+        valueEl.textContent = `${prefix}${formatted}${suffix}`;
+
+        if (t < 1) {
+            requestAnimationFrame(frame);
+        } else {
+            valueEl.textContent = raw;
+        }
+    };
+
+    valueEl.textContent = `${prefix}${decimals > 0 ? (0).toFixed(decimals) : '0'}${suffix}`;
+    requestAnimationFrame(frame);
 }
 
 // Vibe Coder Characteristics
@@ -229,17 +332,26 @@ function renderUserTypesChart() {
         const x = padding + (type.agency / 100) * (chartWidth - 2 * padding) - 30;
         const y = chartHeight - padding - (type.literacy / 100) * (chartHeight - 2 * padding) - 30;
 
+        const levelRange = type.id === 'vibe-coder' ? 'L0-L2' :
+            type.id === 'autopilot' ? 'L2-L3' :
+            type.id === 'workflow-builder' ? 'L4' : 'L5-L6';
+
         return `
-            <div class="chart-point" style="left: ${x}px; top: ${y}px; background-color: ${type.color};">
-                ${type.id === 'vibe-coder' ? 'L0-L2' :
-                  type.id === 'autopilot' ? 'L2-L3' :
-                  type.id === 'workflow-builder' ? 'L4' : 'L5-L6'}
-                <div class="chart-point-tooltip">
+            <div
+                class="chart-point"
+                data-user-type="${type.id}"
+                role="button"
+                tabindex="0"
+                aria-expanded="false"
+                aria-label="${type.name} (nhấn để xem mô tả)"
+                style="left: ${x}px; top: ${y}px; background-color: ${type.color};"
+            >
+                ${levelRange}
+                <div class="chart-point-tooltip" role="tooltip">
                     <div class="tooltip-title">${type.name}</div>
                     <div class="tooltip-desc">${type.description}</div>
-                    <div style="margin-top: 8px; font-size: 11px; color: #666;">
-                        <strong>Triết lý:</strong> ${type.philosophy}
-                    </div>
+                    <div class="tooltip-meta"><strong>Triết lý:</strong> ${type.philosophy}</div>
+                    ${type.risk ? `<div class="tooltip-meta"><strong>Rủi ro:</strong> ${type.risk}</div>` : ''}
                 </div>
             </div>
         `;
@@ -252,6 +364,51 @@ function renderUserTypesChart() {
             <span><strong>${type.name}</strong>: ${type.en}</span>
         </div>
     `).join('');
+
+    initializeUserTypesInteractions();
+}
+
+function closeAllUserTypeTooltips() {
+    document.querySelectorAll('.chart-point.is-open').forEach(point => {
+        point.classList.remove('is-open');
+        point.setAttribute('aria-expanded', 'false');
+    });
+}
+
+function initializeUserTypesInteractions() {
+    const points = document.querySelectorAll('.chart-point');
+    if (!points.length) return;
+
+    points.forEach(point => {
+        point.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasOpen = point.classList.contains('is-open');
+            closeAllUserTypeTooltips();
+            if (!wasOpen) {
+                point.classList.add('is-open');
+                point.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        point.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                point.click();
+                return;
+            }
+            if (e.key === 'Escape') {
+                closeAllUserTypeTooltips();
+                point.blur();
+            }
+        });
+    });
+
+    if (AppState.userTypesGlobalListenersInitialized) return;
+    document.addEventListener('click', closeAllUserTypeTooltips);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllUserTypeTooltips();
+    });
+    AppState.userTypesGlobalListenersInitialized = true;
 }
 
 // Levels Timeline
@@ -264,7 +421,14 @@ function renderLevels() {
             <div class="level-marker" style="border-color: ${level.color}; color: ${level.color};">
                 ${level.level.replace('L', '')}
             </div>
-            <div class="level-header" onclick="toggleLevel(this)">
+            <button
+                class="level-header"
+                id="level-header-${level.level}"
+                type="button"
+                onclick="toggleLevel(this)"
+                aria-expanded="false"
+                aria-controls="level-content-${level.level}"
+            >
                 <div>
                     <span class="level-badge" style="background-color: ${level.color};">${level.level}</span>
                     <span class="level-name">${level.name}</span>
@@ -275,8 +439,8 @@ function renderLevels() {
                         <path d="M6 9l6 6 6-6"/>
                     </svg>
                 </div>
-            </div>
-            <div class="level-content">
+            </button>
+            <div class="level-content" id="level-content-${level.level}" role="region" aria-labelledby="level-header-${level.level}">
                 <div class="level-details">
                     <p class="level-description">${level.description}</p>
 
@@ -304,9 +468,17 @@ function renderLevels() {
     `).join('');
 }
 
-function toggleLevel(header) {
-    const levelItem = header.closest('.level-item');
-    levelItem.classList.toggle('expanded');
+function toggleLevel(button) {
+    const levelItem = button.closest('.level-item');
+    if (!levelItem) return;
+
+    const content = levelItem.querySelector('.level-content');
+    const isExpanded = levelItem.classList.toggle('expanded');
+    button.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+
+    if (content) {
+        content.style.maxHeight = isExpanded ? `${content.scrollHeight}px` : '0px';
+    }
 }
 
 // Quiz
@@ -334,7 +506,7 @@ function renderQuizQuestions() {
             <div class="quiz-options">
                 ${Object.entries(q.scoring).map(([score, description]) => `
                     <label class="quiz-option">
-                        <input type="radio" name="${q.id}" value="${score}" onchange="selectQuizOption('${q.id}', ${score})">
+                        <input type="radio" name="${q.id}" value="${score}" onchange="selectQuizOption(event, '${q.id}', ${score})">
                         <div class="quiz-option-label">${description}</div>
                         <div class="quiz-option-score">${score} điểm</div>
                     </label>
@@ -343,21 +515,25 @@ function renderQuizQuestions() {
         </div>
     `).join('') + `
         <div class="quiz-actions">
-            <button class="btn btn-primary btn-large" onclick="calculateQuizResult()">Xem kết quả</button>
-            <button class="btn btn-secondary" onclick="resetQuiz()">Làm lại</button>
+            <button class="btn btn-primary btn-large" type="button" onclick="calculateQuizResult()">Xem kết quả</button>
+            <button class="btn btn-secondary" type="button" onclick="resetQuiz()">Làm lại</button>
         </div>
     `;
 }
 
-function selectQuizOption(questionId, score) {
+function selectQuizOption(event, questionId, score) {
     AppState.quizAnswers[questionId] = score;
 
     // Update visual selection
     const questionContainer = document.querySelector(`[data-question="${questionId}"]`);
+    if (!questionContainer) return;
+
     questionContainer.querySelectorAll('.quiz-option').forEach(option => {
         option.classList.remove('selected');
     });
-    event.target.closest('.quiz-option').classList.add('selected');
+
+    const selectedOption = event?.target?.closest('.quiz-option');
+    if (selectedOption) selectedOption.classList.add('selected');
 }
 
 function calculateQuizResult() {
@@ -443,8 +619,8 @@ function showQuizResult(score, level, persona) {
         </div>
 
         <div class="result-actions">
-            <button class="btn btn-primary" onclick="copyQuizResult()">Copy kết quả</button>
-            <button class="btn btn-secondary" onclick="resetQuiz()">Làm lại</button>
+            <button class="btn btn-primary copy-btn" type="button" onclick="copyQuizResult()">Copy kết quả</button>
+            <button class="btn btn-secondary" type="button" onclick="resetQuiz()">Làm lại</button>
         </div>
     `;
 }
@@ -464,6 +640,68 @@ function resetQuiz() {
     document.getElementById('quizResult').style.display = 'none';
     document.querySelector('.quiz-intro').style.display = 'block';
     document.getElementById('quizQuestions').style.display = 'none';
+}
+
+async function copyToClipboard(text) {
+    const value = (text || '').toString();
+    if (!value) return false;
+
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(value);
+            return true;
+        }
+    } catch (_) {
+        // Fallback below
+    }
+
+    try {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok = document.execCommand('copy');
+        textarea.remove();
+        return ok;
+    } catch (_) {
+        return false;
+    }
+}
+
+function flashCopied(button, { copiedText = 'Đã copy!', durationMs = 1500 } = {}) {
+    if (!button) return;
+
+    const original = button.getAttribute('data-original-label') || button.textContent;
+    button.setAttribute('data-original-label', original);
+    button.textContent = copiedText;
+    button.classList.add('copied');
+
+    window.setTimeout(() => {
+        button.textContent = original;
+        button.classList.remove('copied');
+    }, durationMs);
+}
+
+function initializeTemplateCopyButtons() {
+    document.querySelectorAll('.copy-template-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const targetId = btn.getAttribute('data-copy-target');
+            const source = targetId ? document.getElementById(targetId) : null;
+            const text = source?.textContent?.trim();
+            if (!text) return;
+
+            const ok = await copyToClipboard(text);
+            if (ok) {
+                flashCopied(btn);
+            } else {
+                alert('Không thể copy template. Vui lòng thử lại.');
+            }
+        });
+    });
 }
 
 function copyQuizResult() {
@@ -486,17 +724,13 @@ ${Array.from(upgradeSteps).map((step, i) => `${i + 1}. ${step.textContent}`).joi
 Nguồn: Từ "Vibe Coder" đến Kiến trúc sư AI
     `.trim();
 
-    navigator.clipboard.writeText(resultText).then(() => {
-        const copyBtn = document.querySelector('.copy-result-btn');
-        if (copyBtn) {
-            copyBtn.textContent = 'Đã copy!';
-            copyBtn.classList.add('copied');
-            setTimeout(() => {
-                copyBtn.textContent = 'Copy kết quả';
-                copyBtn.classList.remove('copied');
-            }, 2000);
+    copyToClipboard(resultText).then((ok) => {
+        if (!ok) {
+            alert('Không thể copy kết quả. Vui lòng thử lại.');
+            return;
         }
-    }).catch(err => {
+        flashCopied(document.querySelector('#quizResult .copy-btn'), { durationMs: 2000 });
+    }).catch((err) => {
         console.error('Failed to copy:', err);
         alert('Không thể copy kết quả. Vui lòng thử lại.');
     });
@@ -519,12 +753,21 @@ function renderReferences() {
     const container = document.getElementById('referencesList');
     if (!container || !AppState.content?.references) return;
 
-    container.innerHTML = AppState.content.references.map(ref => `
-        <div class="reference-item">
-            <a href="${ref.url}" target="_blank" rel="noopener noreferrer">${ref.title}</a>
-            <div class="reference-source">${ref.source}</div>
-        </div>
-    `).join('');
+    container.innerHTML = AppState.content.references.map(ref => {
+        const url = (typeof ref.url === 'string' ? ref.url : '').trim();
+        const isHttpUrl = url.startsWith('http://') || url.startsWith('https://');
+
+        const titleHtml = isHttpUrl
+            ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${ref.title}</a>`
+            : `<span class="reference-title">${ref.title}</span>`;
+
+        return `
+            <div class="reference-item">
+                ${titleHtml}
+                <div class="reference-source">${ref.source}</div>
+            </div>
+        `;
+    }).join('');
 }
 
 // ========================================
@@ -562,8 +805,10 @@ document.addEventListener('keydown', (e) => {
     // Close mobile menu on Escape
     if (e.key === 'Escape') {
         const navMenu = document.getElementById('navMenu');
+        const navToggle = document.getElementById('navToggle');
         if (navMenu && navMenu.classList.contains('active')) {
             navMenu.classList.remove('active');
+            if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
         }
     }
 });
