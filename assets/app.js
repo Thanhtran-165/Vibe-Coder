@@ -322,14 +322,15 @@ function renderUserTypesChart() {
     const legend = document.getElementById('userTypesLegend');
     if (!chart || !legend || !AppState.content?.userTypes) return;
 
-    const chartWidth = chart.offsetWidth || 600;
-    const chartHeight = 400;
-    const padding = 50;
+    const rect = chart.getBoundingClientRect();
+    const chartWidth = rect.width || chart.offsetWidth || 600;
+    const chartHeight = rect.height || chart.offsetHeight || 400;
+    const padding = Math.max(32, Math.min(56, Math.round(Math.min(chartWidth, chartHeight) * 0.12)));
 
     // Render chart points
     chart.innerHTML = AppState.content.userTypes.map(type => {
-        const x = padding + (type.agency / 100) * (chartWidth - 2 * padding) - 30;
-        const y = chartHeight - padding - (type.literacy / 100) * (chartHeight - 2 * padding) - 30;
+        const x = padding + (type.agency / 100) * (chartWidth - 2 * padding);
+        const y = chartHeight - padding - (type.literacy / 100) * (chartHeight - 2 * padding);
 
         const levelRange = type.id === 'vibe-coder' ? 'L0-L2' :
             type.id === 'autopilot' ? 'L2-L3' :
@@ -343,9 +344,11 @@ function renderUserTypesChart() {
                 tabindex="0"
                 aria-expanded="false"
                 aria-label="${type.name} (nhấn để xem mô tả)"
-                style="left: ${x}px; top: ${y}px; background-color: ${type.color};"
+                style="left: ${x}px; top: ${y}px;"
             >
-                ${levelRange}
+                <div class="chart-point-dot" style="background-color: ${type.color};">
+                    ${levelRange}
+                </div>
                 <div class="chart-point-tooltip" role="tooltip">
                     <div class="tooltip-title">${type.name}</div>
                     <div class="tooltip-desc">${type.description}</div>
@@ -358,10 +361,10 @@ function renderUserTypesChart() {
 
     // Render legend
     legend.innerHTML = AppState.content.userTypes.map(type => `
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: ${type.color};"></div>
+        <button class="legend-item" type="button" data-user-type="${type.id}" aria-label="${type.name}: ${type.en}">
+            <span class="legend-color" style="background-color: ${type.color};"></span>
             <span><strong>${type.name}</strong>: ${type.en}</span>
-        </div>
+        </button>
     `).join('');
 
     initializeUserTypesInteractions();
@@ -374,6 +377,28 @@ function closeAllUserTypeTooltips() {
     });
 }
 
+function openUserTypeTooltip(userTypeId, { scrollIntoView = false } = {}) {
+    if (!userTypeId) return;
+
+    const point = document.querySelector(`.chart-point[data-user-type="${userTypeId}"]`);
+    if (!point) return;
+
+    const wasOpen = point.classList.contains('is-open');
+    closeAllUserTypeTooltips();
+
+    if (!wasOpen) {
+        point.classList.add('is-open');
+        point.setAttribute('aria-expanded', 'true');
+    }
+
+    point.classList.add('is-highlighted');
+    window.setTimeout(() => point.classList.remove('is-highlighted'), 900);
+
+    if (scrollIntoView) {
+        point.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    }
+}
+
 function initializeUserTypesInteractions() {
     const points = document.querySelectorAll('.chart-point');
     if (!points.length) return;
@@ -381,12 +406,7 @@ function initializeUserTypesInteractions() {
     points.forEach(point => {
         point.addEventListener('click', (e) => {
             e.stopPropagation();
-            const wasOpen = point.classList.contains('is-open');
-            closeAllUserTypeTooltips();
-            if (!wasOpen) {
-                point.classList.add('is-open');
-                point.setAttribute('aria-expanded', 'true');
-            }
+            openUserTypeTooltip(point.getAttribute('data-user-type'));
         });
 
         point.addEventListener('keydown', (e) => {
@@ -399,6 +419,13 @@ function initializeUserTypesInteractions() {
                 closeAllUserTypeTooltips();
                 point.blur();
             }
+        });
+    });
+
+    document.querySelectorAll('.legend-item[data-user-type]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openUserTypeTooltip(btn.getAttribute('data-user-type'), { scrollIntoView: true });
         });
     });
 
