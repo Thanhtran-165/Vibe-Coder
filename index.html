@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ Vibe Coder đến Kiến trúc sư AI</title>
+    <meta name="description" content="Hiểu Đúng Năng Lực Làm Việc Với AI - Khung phân loại L0-L6 và lộ trình phát triển">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Sticky Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">AI Capabilities</div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#why-now" data-section="why-now">Tại sao now?</a></li>
+                <li><a href="#vibe-coder" data-section="vibe-coder">Vibe Coder?</a></li>
+                <li><a href="#misconceptions" data-section="misconceptions">Hiểu lầm</a></li>
+                <li><a href="#user-types" data-section="user-types">4 Kiểu người dùng</a></li>
+                <li><a href="#levels" data-section="levels">Thang L0-L6</a></li>
+                <li><a href="#quiz" data-section="quiz">Quiz 1 phút</a></li>
+                <li><a href="#conclusion" data-section="conclusion">Kết luận</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Từ Vibe Coder</span>
+                    <br>đến Kiến trúc sư AI
+                </h1>
+                <p class="hero-subtitle">Hiểu Đúng Năng Lực Làm Việc Với AI</p>
+                <p class="hero-description">
+                    Trong kỷ nguyên AI, ranh giới quan trọng không nằm ở "bạn có biết viết mã hay không",
+                    mà là "bạn có thiết kế được quy trình làm việc với AI đáng tin cậy hay không".
+                </p>
+                <div class="hero-actions">
+                    <a href="#why-now" class="btn btn-primary">Bắt đầu đọc</a>
+                    <a href="#quiz" class="btn btn-secondary">Tự đánh giá 1 phút</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <svg class="hero-illustration" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="200" cy="200" r="180" stroke="currentColor" stroke-width="2" opacity="0.1"/>
+                    <circle cx="200" cy="200" r="140" stroke="currentColor" stroke-width="2" opacity="0.15"/>
+                    <circle cx="200" cy="200" r="100" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+                    <path d="M200 50 L200 350" stroke="currentColor" stroke-width="2" opacity="0.3" stroke-dasharray="8 8"/>
+                    <path d="M50 200 L350 200" stroke="currentColor" stroke-width="2" opacity="0.3" stroke-dasharray="8 8"/>
+                    <circle cx="280" cy="120" r="40" fill="url(#gradient1)" opacity="0.8"/>
+                    <circle cx="120" cy="280" r="30" fill="url(#gradient2)" opacity="0.6"/>
+                    <circle cx="300" cy="280" r="25" fill="url(#gradient3)" opacity="0.7"/>
+                    <circle cx="100" cy="120" r="35" fill="url(#gradient4)" opacity="0.5"/>
+                    <text x="280" y="125" text-anchor="middle" fill="white" font-size="12" font-weight="bold">L6</text>
+                    <text x="120" y="285" text-anchor="middle" fill="white" font-size="12" font-weight="bold">L0</text>
+                    <defs>
+                        <linearGradient id="gradient1" x1="240" y1="80" x2="320" y2="160">
+                            <stop offset="0%" stop-color="#8b5cf6"/>
+                            <stop offset="100%" stop-color="#6366f1"/>
+                        </linearGradient>
+                        <linearGradient id="gradient2" x1="90" y1="250" x2="150" y2="310">
+                            <stop offset="0%" stop-color="#94a3b8"/>
+                            <stop offset="100%" stop-color="#64748b"/>
+                        </linearGradient>
+                        <linearGradient id="gradient3" x1="275" y1="255" x2="325" y2="305">
+                            <stop offset="0%" stop-color="#3b82f6"/>
+                            <stop offset="100%" stop-color="#2563eb"/>
+                        </linearGradient>
+                        <linearGradient id="gradient4" x1="65" y1="85" x2="135" y2="155">
+                            <stop offset="0%" stop-color="#ef4444"/>
+                            <stop offset="100%" stop-color="#dc2626"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll để khám phá</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Why Now Section -->
+    <section class="section stats-section" id="why-now">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tại sao NOW?</h2>
+                <p class="section-subtitle">AI đang thay đổi cách chúng ta viết mã - với cả cơ hội và rủi ro</p>
+            </div>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats will be populated by JS -->
+            </div>
+            <div class="stats-insight">
+                <div class="insight-card">
+                    <h3>⚠️ Hai mặt của đồng xu</h3>
+                    <p>AI có thể giúp <strong>tăng tốc 55%</strong> và tiết kiệm <strong>5 giờ/tuần</strong>, nhưng cũng dễ tạo ra "mã rác" - tỷ lệ code phải sửa trong 2 tuần đã <strong>tăng gấp đôi</strong> vào năm 2024.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Vibe Coder Section -->
+    <section class="section vibe-section" id="vibe-coder">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Vibe Coder là gì?</h2>
+                <p class="section-subtitle">Không phải ai dùng AI để code đều là "vibe coder"</p>
+            </div>
+            <div class="vibe-intro">
+                <p class="lead-text">
+                    <strong>Vibe coder</strong> là thuật ngữ chỉ cách viết code với AI một cách <em>cảm tính</em>,
+                    thiếu <em>cấu trúc</em> và thiếu <em>kiểm soát</em>. Đây là trường hợp cực đoan khi người dùng:
+                </p>
+            </div>
+            <div class="characteristics-grid" id="characteristicsGrid">
+                <!-- Characteristics cards will be populated by JS -->
+            </div>
+            <div class="vibe-note">
+                <div class="note-icon">💡</div>
+                <p><strong>Chỉ phù hợp cho:</strong> Thử nghiệm nhanh hoặc prototype - nơi chấp nhận rủi ro cao để đổi lấy tốc độ.
+                <br><strong>KHÔNG phù hợp cho:</strong> Production systems cần độ tin cậy và bền vững.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Misconceptions Section -->
+    <section class="section misconceptions-section" id="misconceptions">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">3 Hiểu lầm phổ biến</h2>
+                <p class="section-subtitle">Đừng để định kiến che mờ sự thật</p>
+            </div>
+            <div class="misconceptions-grid" id="misconceptionsGrid">
+                <!-- Misconceptions will be populated by JS -->
+            </div>
+            <div class="so-what">
+                <h3>So What?</h3>
+                <p>Vibe coding <strong>không đồng nghĩa</strong> với "dùng AI để code". Thuật ngữ này chỉ nên áp dụng cho
+                trường hợp cực đoan khi người dùng thiếu cả sự chủ động lẫn bước xác thực, làm việc hoàn toàn cảm tính với AI.</p>
+                <div class="stat-highlight">
+                    <span class="number">75%</span>
+                    <span class="label">lập trình viên vẫn thích hỏi đồng nghiệp hơn tin hoàn toàn vào AI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Types Section -->
+    <section class="section user-types-section" id="user-types">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">4 Kiểu người dùng AI</h2>
+                <p class="section-subtitle">Phân loại theo hai trục: Agency vs Engineering Literacy</p>
+            </div>
+            <div class="chart-container">
+                <div class="chart-axes">
+                    <div class="y-axis-label">Engineering Literacy <span class="small">(Hiểu biết kỹ thuật)</span></div>
+                    <div class="x-axis-label">Agency <span class="small">(Mức chủ động)</span></div>
+                </div>
+                <div class="scatter-chart" id="scatterChart">
+                    <!-- User type points will be populated by JS -->
+                </div>
+            </div>
+            <div class="user-types-legend" id="userTypesLegend">
+                <!-- Legend will be populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- L0-L6 Levels Section -->
+    <section class="section levels-section" id="levels">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Thang năng lực L0–L6</h2>
+                <p class="section-subtitle">Từ người tiêu thụ thụ động đến kiến trúc sư hệ thống AI</p>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-levels" id="timelineLevels">
+                    <!-- Levels will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section class="section quiz-section" id="quiz">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tự Đánh Giá 1 Phút</h2>
+                <p class="section-subtitle">Trả lời 3 câu hỏi để biết level và persona của bạn</p>
+            </div>
+            <div class="quiz-container" id="quizContainer">
+                <div class="quiz-intro">
+                    <p class="quiz-description">Mỗi câu hỏi được chấm điểm từ 0-2 điểm. Tổng điểm sẽ xác định level L0-L6 và persona của bạn.</p>
+                    <button class="btn btn-primary btn-large" id="startQuizBtn">Bắt đầu đánh giá</button>
+                </div>
+                <div class="quiz-questions" id="quizQuestions" style="display: none;">
+                    <!-- Questions will be populated by JS -->
+                </div>
+                <div class="quiz-result" id="quizResult" style="display: none;">
+                    <!-- Result will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section class="section conclusion-section" id="conclusion">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Kết Luận</h2>
+                <p class="section-subtitle">Thay đổi tư duy, không chỉ thay đổi công cụ</p>
+            </div>
+            <div class="takeaways" id="takeaways">
+                <!-- Takeaways will be populated by JS -->
+            </div>
+            <div class="conclusion-cta">
+                <h3>Bạn đã sẵn sàng nâng cấp?</h3>
+                <p>Đừng để AI "lái" bạn - hãy là người lái AI. Khung L0-L6 cung cấp lộ trình rõ ràng để phát triển từ chỗ dùng AI cảm tính sang thiết kế hệ thống AI đáng tin cậy.</p>
+                <div class="cta-actions">
+                    <a href="#quiz" class="btn btn-primary">Xác định Level của bạn</a>
+                    <a href="#levels" class="btn btn-secondary">Khám phá lộ trình</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section class="section references-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nguồn tham khảo</h2>
+            </div>
+            <div class="references-list" id="referencesList">
+                <!-- References will be populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 - Được xây dựng từ tài liệu "Từ Vibe Coder đến Kiến trúc sư AI"</p>
+            <p class="footer-note">AI là công cụ hỗ trợ - không thay thế quy trình kỹ nghệ phần mềm nghiêm ngặt</p>
+        </div>
+    </footer>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>

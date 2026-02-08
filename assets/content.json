@@ -1,0 +1,357 @@
+{
+  "meta": {
+    "title": "Từ Vibe Coder đến Kiến trúc sư AI",
+    "subtitle": "Hiểu Đúng Năng Lực Làm Việc Với AI",
+    "version": "1.0"
+  },
+  "stats": [
+    {
+      "value": "50%",
+      "label": "Lập trình viên dùng AI (2023)",
+      "source": "Stack Overflow Survey"
+    },
+    {
+      "value": "84%",
+      "label": "Lập trình viên dùng AI (2025)",
+      "source": "Stack Overflow Survey 2025"
+    },
+    {
+      "value": "55%",
+      "label": "Nhanh hơn khi dùng Copilot",
+      "source": "GitClear Experiment"
+    },
+    {
+      "value": "5h",
+      "label": "Tiết kiệm mỗi tuần",
+      "source": "Thomson Reuters 2025"
+    },
+    {
+      "value": "$19K",
+      "label": "Giá trị năng suất/năm",
+      "source": "Thomson Reuters 2025"
+    },
+    {
+      "value": "2x",
+      "label": "Tỷ lệ code phải sửa (2024)",
+      "source": "GitClear Research"
+    }
+  ],
+  "vibeCoder": {
+    "title": "Vibe Coder là gì?",
+    "description": "Vibe coder là thuật ngữ chỉ cách viết code với AI một cách cảm tính, thiếu cấu trúc và thiếu kiểm soát.",
+    "characteristics": [
+      {
+        "icon": "📋",
+        "title": "Thiếu Spec",
+        "en": "Missing Specification",
+        "description": "Không có đặc tả rõ ràng hoặc đặc tả rất mơ hồ - gần như không có tiêu chí đúng/sai để xác định kết quả mong muốn."
+      },
+      {
+        "icon": "🎮",
+        "title": "Agency Thấp",
+        "en": "Low Agency",
+        "description": "Phó mặc nhiều quyết định kỹ thuật cho AI, hầu như không can thiệp hay giám sát sâu trong quy trình phát triển."
+      },
+      {
+        "icon": "✅",
+        "title": "Kiểm Thử Ít",
+        "en": "Low Verification",
+        "description": "Ít hoặc không có bước kiểm thử đơn vị, không xác nhận độc lập kết quả, không rà soát lại mã nguồn AI tạo ra."
+      },
+      {
+        "icon": "⚠️",
+        "title": "Workflow Mong Manh",
+        "en": "Fragile Workflow",
+        "description": "Chương trình có thể chạy được một lần nhưng khó tái lập ổn định, lỗi ẩn dễ xuất hiện và rất khó debug/rollback."
+      }
+    ],
+    "suitability": "Chỉ phù hợp cho thử nghiệm nhanh hoặc prototype - nơi chấp nhận rủi ro cao để đổi lấy tốc độ."
+  },
+  "misconceptions": [
+    {
+      "title": "Bỏ qua yếu tố chủ động",
+      "description": "Nhiều người ngoài ngành công nghệ tuy không viết code truyền thống nhưng lại thiết kế quy trình làm việc với AI rất chặt chẽ, có tầng kiểm soát rõ ràng. Họ không thể xem là vibe coder.",
+      "soWhat": "Đừng đánh giá năng lực chỉ dựa trên background kỹ thuật truyền thống."
+    },
+    {
+      "title": "Đánh đồng bài bản với cảm tính",
+      "description": "Có sự khác biệt lớn giữa người dùng AI có phương pháp (biết thiết kế pipeline, có bước kiểm tra) với người chỉ 'prompt ra code rồi dùng ngay'.",
+      "soWhat": "75% lập trình viên vẫn thích hỏi đồng nghiệp hơn tin hoàn toàn vào AI - kiểm chứng là quan trọng."
+    },
+    {
+      "title": "Định kiến tiêu cực cản trở học hỏi",
+      "description": "Gọi tất cả người dùng AI là vibe coder dễ dẫn đến hiểu lầm rằng chỉ cần 'quăng prompt cho AI là xong', trong khi workflow bài bản đòi hỏi kỹ năng cao.",
+      "soWhat": "Kỹ năng thiết kế workflow, phân rã bài toán, xác minh kết quả đang trở nên quan trọng hơn bao giờ hết."
+    }
+  ],
+  "userTypes": [
+    {
+      "id": "vibe-coder",
+      "name": "Vibe Coder",
+      "en": "Intuitive Coder",
+      "agency": 20,
+      "literacy": 25,
+      "description": "Lập trình cảm tính: làm việc chủ yếu dựa trên prompt và thử-sai, thiếu đặc tả và hiếm khi xác minh kết quả.",
+      "philosophy": "\"Chạy được là được\" - ít quan tâm đến kiến trúc hay chất lượng mã nguồn dài hạn.",
+      "risk": "Hệ thống rất dễ gãy, code churn tăng cao.",
+      "color": "#ef4444"
+    },
+    {
+      "id": "autopilot",
+      "name": "Autopilot Engineer",
+      "en": "Self-Piloting Engineer",
+      "agency": 25,
+      "literacy": 80,
+      "description": "Kỹ sư có nền tảng kỹ thuật tốt nhưng ủy thác tư duy quá mức cho AI, chấp nhận gợi ý mà không rà soát kỹ.",
+      "philosophy": "Để AI đề xuất kiến trúc/giải pháp và chấp nhận mà không kiểm soát chi tiết.",
+      "risk": "Kỹ sư kỳ cựu có thể hoàn thành chậm hơn 19% khi dùng AI trong dự án quen.",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "workflow-builder",
+      "name": "Agentic Workflow Builder",
+      "en": "Proactive Process Builder",
+      "agency": 85,
+      "literacy": 55,
+      "description": "Nhà xây dựng quy trình chủ động: coi AI như thợ, mình là kiến trúc sư thiết kế pipeline với các điểm kiểm soát.",
+      "philosophy": "Thiết kế rõ input → xử lý → output, với gate ở từng bước để đảm bảo chất lượng.",
+      "risk": "Workflow bền vững, có thể lặp lại và dễ truy vết khi có sự cố.",
+      "color": "#10b981"
+    },
+    {
+      "id": "systems-engineer",
+      "name": "Agentic Systems Engineer",
+      "en": "Proactive Systems Engineer",
+      "agency": 95,
+      "literacy": 95,
+      "description": "Kỹ sư hệ thống chủ động: thiết kế hệ thống end-to-end bài bản, tích hợp CI/CD, monitoring, bảo mật, governance.",
+      "philosophy": "AI là công cụ hỗ trợ chứ không thay thế quy trình kỹ nghệ phần mềm nghiêm ngặt.",
+      "risk": "Giải pháp AI đạt tiêu chuẩn sản xuất, vận hành ổn định lâu dài.",
+      "color": "#6366f1"
+    }
+  ],
+  "levels": [
+    {
+      "level": "L0",
+      "name": "Consumer",
+      "vn": "Người tiêu thụ",
+      "description": "Sử dụng AI cho tác vụ đơn lẻ như hỏi đáp, tóm tắt, viết nội dung theo yêu cầu một lần.",
+      "signs": [
+        "Tiếp nhận kết quả từ AI một cách thụ động, tin tưởng như 'sự thật' sẵn có",
+        "Thường nghĩ 'AI nói vậy nên chắc đúng' và không kiểm chứng lại"
+      ],
+      "nextStep": "Học cách đặt câu hỏi critical và đánh giá độ tin cậy của thông tin AI đưa ra.",
+      "color": "#94a3b8"
+    },
+    {
+      "level": "L1",
+      "name": "Prompt Operator",
+      "vn": "Người vận hành prompt",
+      "description": "Biết tối ưu prompt hoặc sử dụng mẫu câu hỏi để có kết quả tốt hơn, có 'thư viện prompt' cho các tình huống.",
+      "signs": [
+        "Sử dụng AI từng lần một (one-off), chưa có workflow hệ thống hóa",
+        "Có thể xem qua kết quả nhưng chưa có bước xác minh chặt chẽ"
+      ],
+      "nextStep": "Bắt đầu xây dựng quy trình kiểm tra kết quả và không chấp nhận ngay output của AI.",
+      "color": "#64748b"
+    },
+    {
+      "level": "L2",
+      "name": "Vibe Coder",
+      "vn": "Lập trình cảm tính",
+      "description": "Dùng AI sinh mã/scripts nhưng thiếu kiểm soát - không có unit test, logging, rollback rõ ràng.",
+      "signs": [
+        "Chạy thử thấy ổn thì dùng ngay, không có gate kiểm tra nào",
+        "Workflow mong manh: hôm nay chạy được, ngày mai có thể hỏng"
+      ],
+      "nextStep": "Học viết spec đơn giản và các kiểm tra cơ bản trước khi chấp nhận code của AI.",
+      "warning": "Đây là vibe coding đúng nghĩa - tiềm ẩn rủi ro cao cho production.",
+      "color": "#ef4444"
+    },
+    {
+      "level": "L3",
+      "name": "Assisted Builder",
+      "vn": "Người xây dựng có hỗ trợ",
+      "description": "Nhận thức tầm quan trọng của đặc tả và kiểm thử cơ bản, viết spec đơn giản và kiểm tra thủ công.",
+      "signs": [
+        "Có spec đơn giản: đầu vào, đầu ra, tiêu chí chấp nhận",
+        "Đọc hiểu code ở mức nhất định, phát hiện bất thường rõ ràng",
+        "Có checklist kiểm tra thủ công và khái niệm 'Definition of Done'"
+      ],
+      "nextStep": "Tự động hóa các bước kiểm tra và thiết kế pipeline bài bản hơn.",
+      "color": "#f59e0b"
+    },
+    {
+      "level": "L4",
+      "name": "Agentic Workflow Builder",
+      "vn": "Nhà thiết kế quy trình chủ động",
+      "description": "Thiết kế workflow hoàn chỉnh, module hóa rõ ràng với các gate kiểm soát giữa các bước.",
+      "signs": [
+        "Workflow có cấu trúc: thu thập → validate → AI xử lý → kiểm tra → xuất output",
+        "Có versioning cho prompt và mã sinh ra",
+        "Có audit trail để biết AI đã làm gì, dùng dữ liệu nào",
+        "Định nghĩa rõ 'Definition of Done' cho mỗi tác vụ AI"
+      ],
+      "nextStep": "Thêm cơ chế giám sát, scheduling và xử lý sự cố tự động.",
+      "color": "#10b981"
+    },
+    {
+      "level": "L5",
+      "name": "Agentic Operator",
+      "vn": "Người vận hành hệ thống chủ động",
+      "description": "Vận hành hệ thống liên tục với monitoring, alerting, và fallback mechanisms.",
+      "signs": [
+        "Có scheduling, monitoring theo dõi hiệu năng và chỉ số",
+        "Có alerting khi có bất thường",
+        "Có kịch bản fallback khi AI gặp lỗi",
+        "Tư duy DevOps/SRE: coi trọng độ ổn định và khả năng phục hồi"
+      ],
+      "nextStep": "Mở rộng sang multi-agent systems và governance bài bản.",
+      "color": "#3b82f6"
+    },
+    {
+      "level": "L6",
+      "name": "Agentic Systems Architect",
+      "vn": "Kiến trúc sư hệ thống AI chủ động",
+      "description": "Thiết kế hệ sinh thái AI phức tạp với đầy đủ governance: security, data lineage, cost management, compliance.",
+      "signs": [
+        "Triển khai nhiều tác tử AI phối hợp (multi-agent systems)",
+        "Có sandbox để kiểm tra tác tử mới",
+        "Audit trail đầy đủ cho mọi tương tác AI",
+        "Quản lý: bảo mật, data lineage, cost, policy & compliance",
+        "Tài liệu kiến trúc chi tiết với sơ đồ tương tác"
+      ],
+      "nextStep": "Đây là cấp cao nhất - tiếp tục tối ưu và mở rộng hệ thống.",
+      "warning": "Tư duy: 'L2 là lái xe thả tay, L6 là lái xe với đầy đủ an toàn, ABS, túi khí và tài xế dự phòng'.",
+      "color": "#8b5cf6"
+    }
+  ],
+  "quiz": {
+    "title": "Tự Đánh Giá 1 Phút",
+    "description": "Trả lời 3 câu hỏi để biết level và persona của bạn",
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Tiêu chí hoàn thành (spec)",
+        "detail": "Trước khi nhờ AI làm việc, bạn có định nghĩa rõ yêu cầu đầu ra và cách kiểm chứng nó không?",
+        "scoring": {
+          "0": "Không có - thường đưa yêu cầu chung chung",
+          "1": "Có sơ bộ - có mô tả nhưng chưa rõ tiêu chí kiểm tra",
+          "2": "Rõ ràng - có spec chi tiết với tiêu chí kiểm chứng khách quan"
+        }
+      },
+      {
+        "id": "q2",
+        "text": "Tầng kiểm soát (validation/gate)",
+        "detail": "Trước khi sử dụng kết quả do AI tạo ra, bạn có bất kỳ lớp xác thực hoặc cổng kiểm duyệt nào không?",
+        "scoring": {
+          "0": "Không có - dùng ngay kết quả của AI",
+          "1": "Có thủ công - chạy thử, xem qua, hoặc nhờ người review",
+          "2": "Có hệ thống/tự động - có unit test, validation tự động, hoặc CI/CD gate"
+        }
+      },
+      {
+        "id": "q3",
+        "text": "Phục hồi lỗi (debug & rollback)",
+        "detail": "Khi hệ thống do AI tạo ra gặp sai sót, bạn có nhanh chóng xác định được lỗi và khôi phục được không?",
+        "scoring": {
+          "0": "Không có - rất khó debug, không biết rollback thế nào",
+          "1": "Có nhưng chậm/khó - có thể tìm ra lỗi nhưng mất nhiều thời gian",
+          "2": "Nhanh + có quy trình - có logging, monitoring, và runbook để xử lý nhanh"
+        }
+      }
+    ],
+    "levelMapping": {
+      "0-1": "L0-L1",
+      "2": "L2",
+      "3": "L3",
+      "4": "L4",
+      "5": "L5",
+      "6": "L6"
+    },
+    "personaMapping": {
+      "low_low": {
+        "name": "Vibe Coder",
+        "condition": "Agency thấp & Literacy thấp",
+        "upgrade": [
+          "Bắt đầu viết spec đơn giản cho mỗi tác vụ AI",
+          "Học đọc hiểu code cơ bản để tự kiểm tra kết quả",
+          "Xây dựng checklist kiểm tra trước khi accept output của AI"
+        ]
+      },
+      "low_high": {
+        "name": "Autopilot Engineer",
+        "condition": "Agency thấp & Literacy cao",
+        "upgrade": [
+          "Đừng chấp nhận ngay gợi ý của AI - hãy review kỹ trước khi dùng",
+          "Thiết kế các gate kiểm tra tự động thay vì chỉ review thủ công",
+          "Giữ quyền chủ động: bạn là architect, AI chỉ là thợ thực hiện"
+        ]
+      },
+      "medium_high": {
+        "name": "Agentic Workflow Builder",
+        "condition": "Agency cao & Literacy trung bình/khá",
+        "upgrade": [
+          "Tự động hóa các bước kiểm tra với unit test và validation",
+          "Thiết kế pipeline end-to-end với audit trail",
+          "Thêm monitoring và logging để theo dõi workflow"
+        ]
+      },
+      "high_high": {
+        "name": "Agentic Systems Engineer",
+        "condition": "Agency cao & Literacy cao",
+        "upgrade": [
+          "Triển khai multi-agent systems cho tác vụ phức tạp",
+          "Thiết lập governance bài bản: security, compliance, cost management",
+          "Xây dựng CI/CD pipeline với automated testing và deployment"
+        ]
+      }
+    }
+  },
+  "conclusion": {
+    "title": "Kết Luận",
+    "takeaways": [
+      "\"Vibe coder\" không phải là thuật ngữ bao hàm tất cả người dùng AI - nó chỉ mô tả trường hợp cực đoan: thiếu chủ động + thiếu kiểm chứng + cảm tính.",
+      "Ranh giới quan trọng không nằm ở \"bạn có biết viết mã hay không\", mà là \"bạn có thiết kế được quy trình làm việc với AI đáng tin cậy hay không\".",
+      "Một người biết tận dụng AI chủ động và có kiểm soát sẽ tạo ra giá trị bền vững hơn nhiều so với người chỉ \"thử vận may\" với AI.",
+      "AI rất mạnh nhưng chỉ là công cụ hỗ trợ - không thay thế được quy trình kỹ nghệ phần mềm chặt chẽ.",
+      "Việc phát triển từ L0/L1 lên các mức cao hơn đảm bảo sự sáng tạo với AI đi đôi với trách nhiệm kỹ thuật."
+    ],
+    "cta": {
+      "primary": "Xác định Level của bạn",
+      "secondary": "Khám phá lộ trình nâng cấp"
+    }
+  },
+  "references": [
+    {
+      "title": "Stanford University - AI makes code buggier",
+      "url": "https://ee.stanford.edu/dan-boneh-and-team-find-relying-ai-more-likely-make-your-code-buggier",
+      "source": "Dan Boneh and team"
+    },
+    {
+      "title": "GitClear - Coding on Copilot: 2023 Data on Code Quality",
+      "url": "https://www.gitclear.com/coding_on_copilot_data_shows_ais_downward_pressure_on_code_quality",
+      "source": "GitClear Research"
+    },
+    {
+      "title": "Stack Overflow Developer Survey 2025",
+      "url": "https://www.itpro.com/software/development/developers-arent-quite-ready-to-place-their-trust-in-ai-nearly-half-say-they-dont-trust-the-accuracy-of-outputs-and-end-up-wasting-time-debugging-code",
+      "source": "IT Pro"
+    },
+    {
+      "title": "Thomson Reuters - 2025 AI adoption trends",
+      "url": "https://www.thomsonreuters.com/en/insights/articles/the-data-speaks-what-has-changed-in-ai-adoption-trends-this-year",
+      "source": "Future of Professionals Report 2025"
+    },
+    {
+      "title": "Reuters - AI slows down some experienced developers",
+      "url": "https://www.reuters.com/business/ai-slows-down-some-experienced-software-developers-study-finds-2025-07-10/",
+      "source": "Reuters/METR study"
+    },
+    {
+      "title": "Addy Osmani - Vibe coding is not the same as AI-assisted engineering",
+      "url": "file://file_00000000e73c7208b9e43807795ac04c",
+      "source": "Addy Osmani"
+    }
+  ]
+}
